@@ -357,7 +357,7 @@ export default {
   methods: {
     getLocationWeather(city, index) {
       axios
-        .get(`http://api.weatherapi.com/v1/current.json`, {
+        .get(`https://api.weatherapi.com/v1/current.json`, {
           params: {
             key: "d72c5a037a5745808e6141937240609",
             q: city,

@@ -32,7 +32,7 @@ export default {
   methods: {
     getForecastData(lat, lon) {
       axios
-        .get(`http://api.weatherapi.com/v1/forecast.json`, {
+        .get(`https://api.weatherapi.com/v1/forecast.json`, {
           params: {
             key: "d72c5a037a5745808e6141937240609",
             q: `${lat},${lon}`,
