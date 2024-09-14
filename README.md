@@ -1,5 +1,5 @@
 # weather-app
-
+Access the finished app from here -> [Click here to see](https://weather-app-ruddy-six-41.vercel.app/)
 ## Project setup
 ```
 npm install
