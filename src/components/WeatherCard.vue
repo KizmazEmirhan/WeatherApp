@@ -31,7 +31,7 @@
       Sıcaklık: {{ weatherData?.current?.temp_c }}°C
       <img v-if="selectedIcon" :src="selectedIcon" alt="icon" />
     </div>
-    <FutureWeather :latitude="latitude" :longitude="longitude"></FutureWeather>
+    <FutureWeather :latitude="lat" :longitude="long" :place="place"></FutureWeather>
   </div>
 </template>
 
@@ -333,15 +333,23 @@ export default {
   components: {
     FutureWeather,
   },
-  inject: ["latitude", "longtitude"],
+
+  props: {
+    place: {
+      type: String,
+      default: null,
+    },
+    lat: { type: Number, default: null },
+    long: { type: Number, default: null },
+  },
   mounted() {
     this.getWeatherData(this.latitude, this.longtitude);
-    this.$watch(
-      () => [this.latitude, this.longtitude],
-      ([newLat, newLong]) => {
-        this.getWeatherData(newLat, newLong);
-      }
-    );
+    // this.$watch(
+    //   () => [this.latitude, this.longtitude],
+    //   ([newLat, newLong]) => {
+    //     this.getWeatherData(newLat, newLong);
+    //   }
+    // );
   },
   data() {
     return {
@@ -350,6 +358,24 @@ export default {
       weatherDesc: "",
       selectedIcon: null,
     };
+  },
+  watch: {
+    lat: {
+      immediate: true,
+      handler(newLat) {
+        if (newLat) {
+          this.getWeatherData(newLat, this.long);
+        }
+      },
+    },
+    place: {
+      immediate: true,
+      handler(newPlace) {
+        if (newPlace) {
+          this.getWeatherData(newPlace);
+        }
+      },
+    },
   },
   methods: {
     setWeatherInfo(code) {
@@ -363,12 +389,15 @@ export default {
         this.selectedIcon = null;
       }
     },
-    getWeatherData(lat, long) {
+    getWeatherData(lat, long, place) {
+      console.log("fonksiyondaki place =", place);
+      const query = place ? place : `${lat},${long}`;
+      console.log(query);
       axios
         .get(`https://api.weatherapi.com/v1/current.json`, {
           params: {
             key: "d72c5a037a5745808e6141937240609",
-            q: `${lat},${long}`,
+            q: query,
           },
         })
         .then((response) => {

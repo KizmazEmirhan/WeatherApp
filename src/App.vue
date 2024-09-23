@@ -1,6 +1,12 @@
 <template>
   <div class="flex flex-col lg:flex-col gap-4 w-[80%]">
-    <weather-card v-if="lat && long"></weather-card>
+    <search-bar @placeUpdated="updateSearchedPlace"></search-bar>
+    <weather-card
+      v-if="searchedPlace || (lat && long)"
+      :place="searchedPlace"
+      :lat="lat"
+      :long="long"
+    ></weather-card>
     <OtherWeatherCard></OtherWeatherCard>
   </div>
 </template>
@@ -9,12 +15,19 @@
 import { ref, provide } from "vue";
 import WeatherCard from "./components/WeatherCard.vue";
 import OtherWeatherCard from "./components/UI/OtherWeatherCard.vue";
+import SearchBar from "./components/UI/SearchBar.vue";
 
 export default {
   name: "App",
   components: {
     WeatherCard,
     OtherWeatherCard,
+    SearchBar,
+  },
+  data() {
+    return {
+      searchedPlace: null,
+    };
   },
   setup() {
     const lat = ref(null);
@@ -33,6 +46,12 @@ export default {
     getCurrentLocation();
 
     return { lat, long };
+  },
+  methods: {
+    updateSearchedPlace(place) {
+      this.searchedPlace = place;
+      (this.lat = null), (this.long = null);
+    },
   },
 };
 </script>

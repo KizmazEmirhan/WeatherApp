@@ -7,7 +7,9 @@
         id="forecast-day"
         class="flex flex-col items-center"
       >
-        <div class="lg:whitespace-nowrap text-center">{{ formatDate(day.date) }}</div>
+        <div class="lg:whitespace-nowrap text-center">
+          {{ formatDate(day.date) }}
+        </div>
         <img :src="day.day.condition.icon" alt="icon" />
         <div>{{ day.day.maxtemp_c }}°C</div>
         <div>{{ day.day.condition.text }}</div>
@@ -20,28 +22,30 @@
 import axios from "axios";
 
 export default {
-  props: ["latitude", "longitude"],
+  props: ["latitude", "longitude", "place"],
   data() {
     return {
       forecastData: [],
     };
   },
   mounted() {
-    this.getForecastData(this.latitude, this.longitude);
+    this.getForecastData(this.latitude, this.longitude, this.place);
   },
   methods: {
-    getForecastData(lat, lon) {
+    getForecastData(lat, lon, place) {
+      const query = place ? place : `${lat},${lon}`;
+      console.log("future weather place", place);
       axios
         .get(`https://api.weatherapi.com/v1/forecast.json`, {
           params: {
             key: "d72c5a037a5745808e6141937240609",
-            q: `${lat},${lon}`,
+            q: query,
             days: 3,
           },
         })
         .then((response) => {
           this.forecastData = response.data.forecast.forecastday;
-          console.log(this.forecastData);
+          //console.log(this.forecastData);
         })
         .catch((error) => {
           console.error("API forecast request failed:", error);
