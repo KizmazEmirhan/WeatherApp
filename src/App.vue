@@ -53,6 +53,7 @@ export default {
       } else {
         this.searchedPlace = place;
         (this.lat = null), (this.long = null);
+        this.message = null;
       }
     },
   },

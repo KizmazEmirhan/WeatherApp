@@ -1,5 +1,10 @@
 <template>
-  <div v-if="message" class="w-full bg-white rounded-lg h-[max-content] flex justify-center text-lg font-bold p-3 ">{{ message }}</div>
+  <div
+    v-if="message"
+    class="w-full bg-white rounded-lg h-[max-content] flex justify-center text-lg font-bold p-3"
+  >
+    {{ message }}
+  </div>
   <div
     class="z-[9999] bg-white flex flex-col rounded-lg p-4 gap-4 h-[fit-content] items-center"
     v-if="!message"
@@ -372,7 +377,7 @@ export default {
       immediate: true,
       handler(newLat) {
         if (newLat) {
-          this.getWeatherData(newLat, this.long);
+          this.getWeatherData(newLat, this.long, null);
         }
       },
     },
@@ -380,7 +385,7 @@ export default {
       immediate: true,
       handler(newPlace) {
         if (newPlace) {
-          this.getWeatherData(newPlace);
+          this.getWeatherData(null, null, newPlace);
         }
       },
     },
@@ -400,7 +405,7 @@ export default {
     getWeatherData(lat, long, place) {
       console.log("fonksiyondaki place =", place);
       const query = place ? place : `${lat},${long}`;
-
+      console.log("query bu aq=", query);
       axios
         .get(`https://api.weatherapi.com/v1/current.json`, {
           params: {
