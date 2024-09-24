@@ -49,7 +49,7 @@ export default {
   methods: {
     updateSearchedPlace(place) {
       if (place == null || place == "") {
-        this.message = "Please dont leave the place blank ! Search again.";
+        this.message = `Please dont leave the "place field" blank ! Search again.`;
       } else {
         this.searchedPlace = place;
         (this.lat = null), (this.long = null);
