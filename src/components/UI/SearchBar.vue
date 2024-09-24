@@ -2,7 +2,7 @@
   <div class="flex items-center justify-end">
     <input
       type="text"
-      class="w-full rounded h-10 p-3 text-sm"
+      class="w-full rounded-lg h-10 p-3 text-sm"
       id="searchPlace"
       placeholder="Type a place for check weather condition"
       v-model="searchedPlace"
@@ -34,7 +34,7 @@ export default {
   methods: {
     checkSearchedPlace() {
       this.$emit("placeUpdated", this.searchedPlace);
-      console.log("aranan yer=", this.searchedPlace); //geliyor
+     
     },
   },
 };

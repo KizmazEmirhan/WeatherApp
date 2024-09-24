@@ -1,6 +1,8 @@
 <template>
+  <div v-if="message" class="w-full bg-white rounded-lg h-[max-content] flex justify-center text-lg font-bold p-3 ">{{ message }}</div>
   <div
     class="z-[9999] bg-white flex flex-col rounded-lg p-4 gap-4 h-[fit-content] items-center"
+    v-if="!message"
   >
     <div id="city-informations">
       <div class="flex gap-2">
@@ -31,7 +33,11 @@
       Sıcaklık: {{ weatherData?.current?.temp_c }}°C
       <img v-if="selectedIcon" :src="selectedIcon" alt="icon" />
     </div>
-    <FutureWeather :latitude="lat" :longitude="long" :place="place"></FutureWeather>
+    <FutureWeather
+      :latitude="lat"
+      :longitude="long"
+      :place="place"
+    ></FutureWeather>
   </div>
 </template>
 
@@ -341,15 +347,17 @@ export default {
     },
     lat: { type: Number, default: null },
     long: { type: Number, default: null },
+    message: { type: String, default: null },
   },
   mounted() {
+    console.log("message is=", this.message);
     this.getWeatherData(this.latitude, this.longtitude);
-    // this.$watch(
-    //   () => [this.latitude, this.longtitude],
-    //   ([newLat, newLong]) => {
-    //     this.getWeatherData(newLat, newLong);
-    //   }
-    // );
+    this.$watch(
+      () => [this.latitude, this.longtitude],
+      ([newLat, newLong]) => {
+        this.getWeatherData(newLat, newLong);
+      }
+    );
   },
   data() {
     return {
@@ -392,7 +400,7 @@ export default {
     getWeatherData(lat, long, place) {
       console.log("fonksiyondaki place =", place);
       const query = place ? place : `${lat},${long}`;
-      console.log(query);
+
       axios
         .get(`https://api.weatherapi.com/v1/current.json`, {
           params: {

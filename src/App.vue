@@ -6,6 +6,7 @@
       :place="searchedPlace"
       :lat="lat"
       :long="long"
+      :message="message"
     ></weather-card>
     <OtherWeatherCard></OtherWeatherCard>
   </div>
@@ -27,6 +28,7 @@ export default {
   data() {
     return {
       searchedPlace: null,
+      message: null,
     };
   },
   setup() {
@@ -39,18 +41,19 @@ export default {
         long.value = position.coords.longitude;
       });
     };
-
     provide("latitude", lat);
     provide("longtitude", long);
-
     getCurrentLocation();
-
     return { lat, long };
   },
   methods: {
     updateSearchedPlace(place) {
-      this.searchedPlace = place;
-      (this.lat = null), (this.long = null);
+      if (place == null || place == "") {
+        this.message = "Please dont leave the place blank ! Search again.";
+      } else {
+        this.searchedPlace = place;
+        (this.lat = null), (this.long = null);
+      }
     },
   },
 };

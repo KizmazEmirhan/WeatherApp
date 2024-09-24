@@ -1,5 +1,5 @@
 <template>
-  <div id="forecast" class="">
+  <div id="forecast" class="" v-if="message == null">
     <div id="forecast-container" class="flex sm:gap-12 gap-3">
       <div
         v-for="(day, index) in forecastData"
@@ -29,12 +29,24 @@ export default {
     };
   },
   mounted() {
-    this.getForecastData(this.latitude, this.longitude, this.place);
+    const query = this.place
+      ? this.place
+      : `${this.latitude},${this.longitude}`;
+    console.log("mounted içindeki query", query);
+    this.getForecastData(query);
+  },
+  watch: {
+    place: {
+      handler(newPlace) {
+        if (newPlace) {
+          this.getForecastData(newPlace);
+        }
+      },
+    },
   },
   methods: {
-    getForecastData(lat, lon, place) {
-      const query = place ? place : `${lat},${lon}`;
-      console.log("future weather place", place);
+    getForecastData(query) {
+      console.log("fonksiyonun içideki query", query);
       axios
         .get(`https://api.weatherapi.com/v1/forecast.json`, {
           params: {
